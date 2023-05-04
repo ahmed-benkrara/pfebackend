@@ -11,7 +11,7 @@ class Order extends Model
 {
     use HasFactory;
     protected $table = 'order';
-    protected $primarykey = 'id';
+    protected $primaryKey = 'id';
     protected $fillable = [
         'user_id', 'orderdate','shipdate'
     ];

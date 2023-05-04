@@ -12,7 +12,7 @@ class OrderItem extends Model
 {
     use HasFactory;
     protected $table = 'orderitem';
-    protected $primarykey = 'id';
+    protected $primaryKey = 'id';
     protected $fillable = [
         'order_id', 'modele_id', 'package_id', 'quantity', 'type'
     ];

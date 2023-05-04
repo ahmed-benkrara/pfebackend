@@ -10,7 +10,7 @@ class ModelImage extends Model
 {
     use HasFactory;
     protected $table = 'modelimage';
-    protected $primarykey = 'id';
+    protected $primaryKey = 'id';
     protected $fillable = [
         'url', 'isposter', 'modele_id'
     ];

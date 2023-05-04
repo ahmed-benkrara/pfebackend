@@ -11,7 +11,7 @@ class Modele extends Model
 {
     use HasFactory;
     protected $table = 'modele';
-    protected $primarykey = 'id';
+    protected $primaryKey = 'id';
     protected $fillable = [
         'name', 'description', 'price', 'package_id'
     ];
