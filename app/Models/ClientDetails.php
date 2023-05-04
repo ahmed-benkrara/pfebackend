@@ -10,7 +10,7 @@ class ClientDetails extends Model
 {
     use HasFactory;
     protected $table = 'clientdetails';
-    protected $primarykey = 'user_id';
+    protected $primaryKey = 'user_id';
     protected $fillable = [
         'user_id', 'phone', 'address', 'picture'
     ];
