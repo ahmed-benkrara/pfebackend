@@ -13,7 +13,7 @@ class Order extends Model
     protected $table = 'order';
     protected $primaryKey = 'id';
     protected $fillable = [
-        'user_id', 'orderdate','shipdate'
+        'user_id', 'status', 'orderdate','shipdate'
     ];
 
     public function user(){

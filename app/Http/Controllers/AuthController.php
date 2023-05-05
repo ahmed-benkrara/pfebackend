@@ -9,6 +9,7 @@ use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\LoginRequest;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Auth\Events\Registered;
 
 class AuthController extends Controller
 {
@@ -31,10 +32,13 @@ class AuthController extends Controller
     public function register(StoreUserRequest $request){
         $request->validated();
         $user = User::create([
-            'name' => $request->name,
+            'fname' =>$request->fname, 
+            'lname' => $request->lname,
             'email' => $request->email,
+            'role' => $request->role,
             'password' => Hash::make($request->password)
         ]);
+        event(new Registered($user));
         return $this->success([
             'user' => $user,
             'token' => $user->createToken('Api token of '.$user->name)->plainTextToken

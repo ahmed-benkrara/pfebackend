@@ -16,8 +16,9 @@ return new class extends Migration
         Schema::create('order', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
+            $table->string('status')->default('placed');
             $table->date('orderdate');
-            $table->date('shipdate');
+            $table->date('shipdate')->nullable();
             $table->foreign('user_id')->references('id')->on('users');
             $table->timestamps();
         });

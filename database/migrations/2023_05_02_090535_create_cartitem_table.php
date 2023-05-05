@@ -16,8 +16,8 @@ return new class extends Migration
         Schema::create('cartitem', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('cart_id');
-            $table->unsignedBigInteger('modele_id');
-            $table->unsignedBigInteger('package_id');
+            $table->unsignedBigInteger('modele_id')->nullable();
+            $table->unsignedBigInteger('package_id')->nullable();
             $table->integer('quantity');
             $table->string('type');
             $table->foreign('cart_id')->references('id')->on('cart');

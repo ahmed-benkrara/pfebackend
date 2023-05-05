@@ -22,10 +22,10 @@ class CartItem extends Model
     }
 
     public function package(){
-        return $this->hasOne(Package::class);
+        return $this->belongsTo(Package::class);
     }
 
     public function modele(){
-        return $this->hasOne(Modele::class);
+        return $this->belongsTo(Modele::class);
     }
 }
