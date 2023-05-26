@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Modele;
+use App\Models\Reviews;
 
 class Package extends Model
 {
@@ -17,5 +18,9 @@ class Package extends Model
 
     public function models(){
         return $this->hasMany(Modele::class);
+    }
+
+    public function reviews(){
+        return $this->hasMany(Reviews::class);
     }
 }

@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Package;
 use App\Models\ModelImage;
+use App\Models\Reviews;
 
 class Modele extends Model
 {
@@ -22,5 +23,9 @@ class Modele extends Model
 
     public function images(){
         return $this->hasMany(ModelImage::class);
+    }
+
+    public function reviews(){
+        return $this->hasMany(Reviews::class);
     }
 }

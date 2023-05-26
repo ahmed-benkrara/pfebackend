@@ -12,6 +12,8 @@ use App\Http\Controllers\CartItemController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\OrderItemController;
 use App\Http\Controllers\VerificationController;
+use App\Http\Controllers\ReviewsController;
+use App\Http\Controllers\ContactController;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,6 +35,9 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::post('/register', [AuthController::class, 'register']);
 Route::get('email/verify/{id}', [VerificationController::class, 'verify'])->name('verification.verify');
 Route::get('email/resend', [VerificationController::class, 'resend'])->name('verification.resend');
+
+//contact us
+Route::post('/contact', [ContactController::class, 'sendMail']);
 
 Route::group(['middleware' => ['auth:sanctum']], function(){
     //logout
@@ -66,5 +71,8 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
     // });
     Route::apiResource('/orders', OrderController::class);
     Route::apiResource('/orderitems', OrderItemController::class);
-
+    
+    //Reviews
+    Route::post('/reviews', [ReviewsController::class, 'store']);
+    Route::delete('/reviews/{id}', [ReviewsController::class, 'destroy']);
 });
