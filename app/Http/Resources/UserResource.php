@@ -3,9 +3,8 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
-use App\Http\Resources\ModeleResource;
 
-class CartResource extends JsonResource
+class UserResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -16,15 +15,19 @@ class CartResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'id' => (string)$this->id,
-            'user_id' => (string)$this->user->id,
-            'items' => $this->items->map(function($item){
-                return [//$item->package ? $item->package->only(['id', 'name', 'description', 'price', 'models']) : null,
-                    'id' => (string) $item->id,
-                    'quantity' => (string) $item->quantity,
+            'id'=> (string)$this->id,
+            'fname'=> $this->fname,
+            'lname'=> $this->lname,
+            'email'=> $this->email,
+            'email_verified_at'=> $this->email_verified_at,
+            'role'=> $this->role,
+            'created_at'=> $this->created_at,
+            'updated_at'=> $this->updated_at,
+            'details' => $this->clientdetails,
+            'favorites' => $this->favorites->map(function($item){
+                return[
+                    'id' => (string)$item->id,
                     'type' => $item->type,
-                    'created_at' => $item->created_at,
-                    'module' => $item->modele ? $item->modele->only(['id', 'name', 'description', 'price', 'images']) : null,
                     'package' => $item->package ? [
                         'id' => $item->package->id, 
                         'name' => $item->package->name, 
@@ -39,7 +42,8 @@ class CartResource extends JsonResource
                                 'images' => $md->images
                             ];
                         }) : null,
-                    ] : null
+                    ] : null,
+                    'module' => $item->modele ? $item->modele->only(['id', 'name', 'description', 'price', 'images']) : null,
                 ];
             })
         ];

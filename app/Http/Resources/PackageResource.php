@@ -19,8 +19,10 @@ class PackageResource extends JsonResource
             'name' => $this->name,
             'description' => $this->description,
             'price' => (string) $this->price,
+            'created_at' => (string) $this->created_at,
             'relationships' => [
-                'models' => $this->models
+                'modules' => $this->models->map->only(['id', 'name', 'description', 'price', 'images', 'reviews']),
+                'reviews' => $this->reviews
             ]
         ];
     }

@@ -7,6 +7,8 @@ use App\Models\Order;
 use App\Http\Resources\OrderResource;
 use App\Http\Requests\OrderRequest;
 use App\Traits\HttpResponses;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\OrderMail;
 
 class OrderController extends Controller
 {
@@ -19,7 +21,7 @@ class OrderController extends Controller
     public function index()
     {
         return OrderResource::collection(
-            Order::all()
+            Order::orderBy('created_at', 'desc')->get()
         );
     }
 
@@ -38,7 +40,20 @@ class OrderController extends Controller
             'orderdate' => $request->orderdate,
             'shipdate' => $request->shipdate
         ]);
+
         return new OrderResource($order);
+    }
+
+    public function sendOrderMail(Request $request){
+        $data = [
+            'subject' => 'Order confirmed',
+            'fname' => $request->fname,
+            'lname' => $request->lname,
+            'items' => $request->items
+        ];
+
+        Mail::to($request->email)->send(new OrderMail($data));
+        return $this->success(null, 'Order sent successfully', 200);
     }
 
     /**

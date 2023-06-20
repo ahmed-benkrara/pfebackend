@@ -34,7 +34,12 @@ class ReviewsController extends Controller
             $review->delete();
             return $this->success(null, 'Deleted successfully', 204);
         }else{
-            return $this->error(null,'Review not found', 404);
+            return $this->error(null, 'Review not found', 404);
         }
+    }
+
+    public function numberOfReviews(){
+        $count = Reviews::count();
+        return $this->success($count, 'success', 200);
     }
 }

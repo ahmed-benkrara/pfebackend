@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class ModeleRequest extends FormRequest
+class FavoriteRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,10 +24,10 @@ class ModeleRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => ['required', 'string', 'unique:modele', 'min:2'],
-            'description' => ['required', 'string'],
-            'price' => ['required', 'numeric'],
-            'package_id' => ['nullable','numeric']
+            'type' => ['required', 'string'], 
+            'modele_id' => ['nullable', 'numeric' ,'exists:modele,id'], 
+            'package_id' => ['nullable', 'numeric' ,'exists:package,id'],
+            'user_id' => ['nullable', 'numeric' ,'exists:users,id'],
         ];
     }
 }

@@ -14,6 +14,11 @@ use App\Http\Controllers\OrderItemController;
 use App\Http\Controllers\VerificationController;
 use App\Http\Controllers\ReviewsController;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\FavoriteController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\SettingsController;
+
+use App\Http\Resources\UserResource;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,7 +32,7 @@ use App\Http\Controllers\ContactController;
 */
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+    return new UserResource($request->user());
 });
 
 //Auth
@@ -39,12 +44,12 @@ Route::get('email/resend', [VerificationController::class, 'resend'])->name('ver
 //contact us
 Route::post('/contact', [ContactController::class, 'sendMail']);
 
+Route::resource('/packages', PackageController::class);
+Route::resource('/modules', ModeleController::class);
+
 Route::group(['middleware' => ['auth:sanctum']], function(){
     //logout
     Route::post('/logout', [AuthController::class, 'logout']);
-
-    Route::resource('/packages', PackageController::class);
-    Route::resource('/modules', ModeleController::class);
 
     //module images
     Route::post('/moduleimage', [ModuleimagesController::class, 'store']);
@@ -63,6 +68,8 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
     });
 
     Route::apiResource('/cartitems', CartItemController::class);
+    Route::delete('/itemsbycart/{id}',[CartItemController::class,'deleteByCartId']);
+
     // Route::prefix('cartitems')->group(function(){
     //     Route::get('/', [CartItemController::class, 'index']);
     //     Route::get('/{id}', [CartItemController::class, 'show']);
@@ -70,9 +77,27 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
     //     Route::delete('/{id}', [CartItemController::class, 'destroy']);
     // });
     Route::apiResource('/orders', OrderController::class);
+    Route::post('/ordermail', [OrderController::class, 'sendOrderMail']);
+
     Route::apiResource('/orderitems', OrderItemController::class);
+    //Favorite
+    Route::post('/favorite', [FavoriteController::class, 'store']);
+    Route::delete('/favorite/{id}', [FavoriteController::class, 'destroy']);
     
-    //Reviews
-    Route::post('/reviews', [ReviewsController::class, 'store']);
-    Route::delete('/reviews/{id}', [ReviewsController::class, 'destroy']);
+    //update user
+    Route::patch('/user/{id}', [AuthController::class, 'updateuser']);
+    Route::patch('/password/{id}', [AuthController::class, 'changePassword']);
+
+    Route::get('/allusers', [UserController::class, 'index']);
+    Route::get('/user/{id}', [UserController::class, 'show']);
+    Route::patch('/user/{id}', [UserController::class, 'update']);
+    Route::get('/users/count', [UserController::class, 'userCount']);
+
+    Route::get('/settings', [SettingsController::class, 'show']);
+    Route::post('/settings', [SettingsController::class, 'update']);
 });
+
+//Reviews
+Route::post('/reviews', [ReviewsController::class, 'store']);
+Route::delete('/reviews/{id}', [ReviewsController::class, 'destroy']);
+Route::get('/reviews/count', [ReviewsController::class, 'numberOfReviews']);

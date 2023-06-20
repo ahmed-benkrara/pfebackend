@@ -33,7 +33,7 @@ class CartItemController extends Controller
     public function store(CartItemRequest $request)
     {
         $request->validated();
-        $find = CartItem::where([['modele_id',$request->modele_id], ['package_id',$request->package_id]])->first();
+        $find = CartItem::where([['modele_id',$request->modele_id], ['package_id',$request->package_id], ['cart_id',$request->cart_id]])->first();
         if($find){
             $find->update([
                 'quantity' => $find->quantity+1
@@ -99,5 +99,10 @@ class CartItemController extends Controller
         }else{
             return $this->error(null,'Item not found', 404);
         }
+    }
+
+    public function deleteByCartId($id){
+        CartItem::where('cart_id', $id)->delete();
+        return $this->success(null, 'Deleted successfully', 204);
     }
 }

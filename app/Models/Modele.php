@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\Package;
 use App\Models\ModelImage;
 use App\Models\Reviews;
+use App\Models\Favorite;
 
 class Modele extends Model
 {

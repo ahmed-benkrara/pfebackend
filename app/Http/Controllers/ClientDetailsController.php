@@ -61,7 +61,22 @@ class ClientDetailsController extends Controller
             $details->update($req);
             return $this->success($details, "Updated successfully", 200);
         }else{
-            return $this->error(null, "Client details not found", 404);
+            if($request->picture != null){
+                $image = $request->picture;
+                $imageName = time().'.'.$image->getClientOriginalExtension();
+                $request->picture->move('profilepics/',$imageName);
+            }else{
+                $imageName = "profilepics/default.jpg";
+            }
+    
+            $details = ClientDetails::create([
+                'user_id' => $id,
+                'address' => $request->address,
+                'phone' => $request->phone,
+                'picture' => 'profilepics/'.$imageName
+            ]);
+
+            return $this->success($details, "Updated successfully", 200);
         }
     }
 }

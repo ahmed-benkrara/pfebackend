@@ -10,6 +10,7 @@ use Laravel\Sanctum\HasApiTokens;
 use App\Models\ClientDetails;
 use App\Models\Cart;
 use App\Models\Order;
+use App\Models\Favorite;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -57,5 +58,9 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function orders(){
         return $this->hasMany(Order::class);
+    }
+
+    public function favorites(){
+        return $this->hasMany(Favorite::class);
     }
 }

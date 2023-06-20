@@ -50,7 +50,7 @@ class ModeleController extends Controller
     {
         $modele = Modele::find($id);
         if($modele){
-            return $this->success($modele);
+            return new ModeleResource($modele);
         }else{
             return $this->error(null, 'Module Not Found', 404);
         }

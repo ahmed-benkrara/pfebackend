@@ -10,6 +10,7 @@ use App\Http\Requests\LoginRequest;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Auth\Events\Registered;
+use App\Http\Resources\UserResource;
 
 class AuthController extends Controller
 {
@@ -50,5 +51,48 @@ class AuthController extends Controller
         return $this->success([
             'message' => 'user logged out successfully'
         ]);
+    }
+
+    public function changePassword(Request $request, $id)
+    {
+        $user = User::find($id);
+        
+        $this->validate($request, [
+            'current' => 'required',
+            'newpassword' => 'required|min:8',
+        ]);
+        
+        if (!Hash::check($request->current, $user->password)) {
+            return $this->error(null, "Current password is incorrect", 401);
+        }
+        
+        $hashedPassword = Hash::make($request->newpassword);
+        
+        $user->password = $hashedPassword;
+        $user->save();
+        
+        return response()->json(['message' => 'Password changed successfully']);
+        return $this->success(null, "Password changed successfully", 200);
+    }
+
+    public function updateuser(Request $request, $id){
+        $user = User::find($id);
+        if($user != null){
+            if(isset($request->email)){
+                if($user->email != $request->email){
+                    $test = User::where('email', $request->email)->first();
+                    if($test == null){
+                        //error
+                        return $this->error(null, "This email is already in use", 409);
+                    }
+                }
+            }
+            //update 
+            $user->update($request->all());
+            return $this->success(new UserResource(User::find($id)), "Updated successfully", 200);
+        }else{
+            //error
+            return $this->error(null, "User not found", 404);
+        }
     }
 }

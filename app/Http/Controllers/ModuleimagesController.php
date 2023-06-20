@@ -13,6 +13,12 @@ class ModuleimagesController extends Controller
 {
     use HttpResponses;
 
+    function generateUniqueFileName($file) {
+        $extension = $file->getClientOriginalExtension();
+        $fileName = hash('sha256', time() . $file->getClientOriginalName()) . '.' . $extension;
+        return $fileName;
+    }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -22,11 +28,12 @@ class ModuleimagesController extends Controller
     public function store(ModuleimagesRequest $request)
     {
         $request->validated();
-        $image = $request->url;
-        $imageName = time().'.'.$image->getClientOriginalExtension();
+        $image = $request->file('url');
+        // $imageName = time().'.'.$image->getClientOriginalExtension();
+        $imageName = $this->generateUniqueFileName($image);
         $request->url->move('moduleimages',$imageName);
         $img = ModelImage::create([
-            'url' => 'moduleimages/'.$imageName,
+            'url' => url('moduleimages/'.$imageName),
             'isposter' => $request->isposter,
             'modele_id' => $request->modele_id
         ]);
@@ -44,7 +51,9 @@ class ModuleimagesController extends Controller
     {
         $image = ModelImage::find($id);
         if($image != null){
-            File::delete($image->url);
+            $parsedUrl = parse_url($image->url);
+            $imagePath = ltrim($parsedUrl['path'], '/');
+            File::delete($imagePath);
             $image->delete();
             return $this->success(null, 'Deleted successfully', 204);
         }else{
